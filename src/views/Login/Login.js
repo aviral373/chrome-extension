@@ -23,14 +23,13 @@ function Login(props) {
       password: state.password,
     };
     axios
-      .post("localhost:3000/api/login", payload)
+      .post("localhost:3000/user/login", payload)
       .then(function (response) {
         if (response.data.code === 200) {
           setState((prevState) => ({
             ...prevState,
             successMessage: "Login successful. Redirecting to home page..",
           }));
-          redirectToHome();
           props.showError(null);
         } else if (response.data.code === 204) {
           props.showError("Username and password do not match");
@@ -98,6 +97,7 @@ function Login(props) {
       <div className="registerMessage">
         <span>Dont have an account? </span>
         <span className="loginText" onClick={() => redirectToRegister()}>
+          {" "}
           Register
         </span>
       </div>
@@ -105,4 +105,16 @@ function Login(props) {
   );
 }
 
-export default withRouter(Login);
+//export default withRouter(Login);
+
+//import React from "react";
+
+//const Login = () => {
+//return (
+//<div>
+//<h1>Hello from Login </h1>
+//</div>
+//);
+//};
+
+export default Login;
