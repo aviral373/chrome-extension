@@ -40,7 +40,6 @@ router.post(
         });
       }
 
-      console.log(req.body);
       user = new User({
         email,
         password,
@@ -56,12 +55,11 @@ router.post(
           id: user.id,
         },
       };
-
       jwt.sign(
         payload,
         "randomString",
         {
-          expiresIn: 10000,
+          expiresIn: 100000,
         },
         (err, token) => {
           if (err) throw err;
@@ -148,10 +146,9 @@ router.post(
 router.post("/me", auth, async (req, res) => {
   try {
     // request.user is getting fetched from Middleware after token authentication
-    const user = await User.findById(req.body.token);
+    const user = await User.findById(req.user.id);
     res.json(user);
   } catch (e) {
-    console.log(req);
     res.send({ message: "Error in Fetching user" });
   }
 });

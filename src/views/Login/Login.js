@@ -25,7 +25,6 @@ function Login(props) {
     axios
       .post("http://localhost:3000/user/login", payload)
       .then(function (response) {
-        console.log(response);
         if (response.request.status === 200) {
           setState((prevState) => ({
             ...prevState,
@@ -33,12 +32,9 @@ function Login(props) {
           }));
           console.log(null);
           redirectToHome();
-          chrome.storage.sync.set(
-            { token: response.data.token, hello: 2 },
-            () => {
-              console.log("Token is set to" + response.data.token);
-            }
-          );
+          chrome.storage.sync.set({ token: response.data.token }, function () {
+            console.log("value is set to" + response.data.token);
+          });
         } else if (response.request.status === 204) {
           console.log("Username and password do not match");
         } else {

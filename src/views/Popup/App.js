@@ -6,18 +6,29 @@ import Login from "../Login/Login";
 import RegistrationForm from "../RegistrationForm/RegistrationForm";
 import axios from "axios";
 function App() {
+  const [userId, SetUserId] = useState("");
+  const [emailId, SetEmailId] = useState("");
   const [loggedIn, SetLoggedIn] = useState(() => {
-    chrome.storage.local.get("[token]", (result) => {
+    chrome.storage.sync.get(["token"], function (result) {
       const payload = {
-        token: result,
+        token: result.token,
       };
-      console.log("hello");
-      console.log(JSON.stringify(payload));
       axios.post("http://localhost:3000/user/me", payload).then((response) => {
-        console.log(response);
+        SetUserId(response.data._id);
+        SetEmailId(response.data.email);
+
+        console.log(userId);
+        console.log(emailId);
+        console.log(response.data._id);
+        console.log(response.data.email);
       });
     });
-    return false;
+    if (userId === "") {
+      return false;
+    } else {
+      console.log(userId);
+      return true;
+    }
   });
 
   return (
