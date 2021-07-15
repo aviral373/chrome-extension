@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Redirect, withRouter } from "react-router-dom";
+import { Redirect, withRouter, Link } from "react-router-dom";
 
 function RegistrationForm(props) {
   const [state, setState] = useState({
@@ -115,10 +115,7 @@ function RegistrationForm(props) {
         {state.successMessage}
       </div>
       <div className="mt-2">
-        <span>Already have an account? </span>
-        <span className="loginText" onClick={() => redirectToLogin()}>
-          Login here
-        </span>
+        <Link to="/login">Already have an account ?Login</Link>
       </div>
     </div>
   );

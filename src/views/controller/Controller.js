@@ -13,26 +13,7 @@ const Controller = () => {
   };
   return (
     <div>
-      {!page && (
-        <Router>
-          <Route path="/login">
-            <Login />
-          </Route>
-          <Route path="/home">
-            <Home />
-          </Route>
-        </Router>
-      )}
-      {page && (
-        <Router>
-          <Route path="/register">
-            <Login />
-          </Route>
-          <Route path="/home">
-            <Home />
-          </Route>
-        </Router>
-      )}
+      <Switch>
       <button onClick={buttoClicked}>{strings[buttonText]}</button>
     </div>
   );

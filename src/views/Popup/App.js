@@ -2,26 +2,34 @@ import React, { useState } from "react";
 import "./App.css";
 import Home from "../Home/Home";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import Controller from "../controller/Controller";
+import Login from "../Login/Login";
+import RegistrationForm from "../RegistrationForm/RegistrationForm";
+import axios from "axios";
 function App() {
-  const [loggedIn, SetLoggedIn] = useState(false);
+  const [loggedIn, SetLoggedIn] = useState(() => {
+    chrome.storage.local.get("[token]", (result) => {
+      const payload = {
+        token: result,
+      };
+      console.log("hello");
+      console.log(JSON.stringify(payload));
+      axios.post("http://localhost:3000/user/me", payload).then((response) => {
+        console.log(response);
+      });
+    });
+    return false;
+  });
 
   return (
     <Router>
-      <Switch>
-        {loggedIn && (
-          <div>
-            <Route exact path="/" component={Home} />
-            <Route exact path="/Login" component={Controller} />
-          </div>
-        )}
-        {!loggedIn && (
-          <div>
-            <Route exact path="/" component={Controller} />
-            <Route exact path="/Home" component={Home} />
-          </div>
-        )}
-      </Switch>
+      <div>
+        <Switch>
+          <Route exact path="/login" component={Login} />
+          <Route exact path="/register" component={RegistrationForm} />
+          <Route exact path="/home" component={Home} />
+          {!loggedIn ? <Login /> : <Home />}
+        </Switch>
+      </div>
     </Router>
   );
 }

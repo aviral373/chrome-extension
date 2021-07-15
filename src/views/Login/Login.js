@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { withRouter } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 
 function Login(props) {
   const [state, setState] = useState({
@@ -23,18 +23,26 @@ function Login(props) {
       password: state.password,
     };
     axios
-      .post("localhost:3000/user/login", payload)
+      .post("http://localhost:3000/user/login", payload)
       .then(function (response) {
-        if (response.data.code === 200) {
+        console.log(response);
+        if (response.request.status === 200) {
           setState((prevState) => ({
             ...prevState,
             successMessage: "Login successful. Redirecting to home page..",
           }));
-          props.showError(null);
-        } else if (response.data.code === 204) {
-          props.showError("Username and password do not match");
+          console.log(null);
+          redirectToHome();
+          chrome.storage.sync.set(
+            { token: response.data.token, hello: 2 },
+            () => {
+              console.log("Token is set to" + response.data.token);
+            }
+          );
+        } else if (response.request.status === 204) {
+          console.log("Username and password do not match");
         } else {
-          props.showError("Username does not exists");
+          console.log("Email does not exist");
         }
       })
       .catch(function (error) {
@@ -42,7 +50,6 @@ function Login(props) {
       });
   };
   const redirectToHome = () => {
-    props.updateTitle("Home");
     props.history.push("/home");
   };
   const redirectToRegister = () => {
@@ -95,26 +102,10 @@ function Login(props) {
         {state.successMessage}
       </div>
       <div className="registerMessage">
-        <span>Dont have an account? </span>
-        <span className="loginText" onClick={() => redirectToRegister()}>
-          {" "}
-          Register
-        </span>
+        <Link to="/register">Dont have an account ? Register</Link>
       </div>
     </div>
   );
 }
 
-//export default withRouter(Login);
-
-//import React from "react";
-
-//const Login = () => {
-//return (
-//<div>
-//<h1>Hello from Login </h1>
-//</div>
-//);
-//};
-
-export default Login;
+export default withRouter(Login);

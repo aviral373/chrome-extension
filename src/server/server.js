@@ -7,7 +7,7 @@ InitiateMongoServer();
 
 const app = express();
 app.use(bodyParser.json());
-// PORT
+
 app.use(
   cors({
     origin: "*",

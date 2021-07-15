@@ -1,9 +1,9 @@
 {
   "manifest_version": 2,
-  "name": "Extension Name",
+  "name": "amazon price tracker",
   "version": "0.1",
   "description": "Some Description",
-  "permissions": [],
+  "permissions": ["storage"],
   "background": {
     "scripts": ["static/js/background.js"]
   },
