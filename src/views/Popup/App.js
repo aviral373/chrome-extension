@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 import Home from "../Home/Home";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
@@ -8,7 +8,8 @@ import axios from "axios";
 function App() {
   const [userId, SetUserId] = useState("");
   const [emailId, SetEmailId] = useState("");
-  const [loggedIn, SetLoggedIn] = useState(() => {
+  const [loggedIn, SetLoggedIn] = useState(false);
+  useEffect(() => {
     chrome.storage.sync.get(["token"], function (result) {
       const payload = {
         token: result.token,
@@ -16,19 +17,9 @@ function App() {
       axios.post("http://localhost:3000/user/me", payload).then((response) => {
         SetUserId(response.data._id);
         SetEmailId(response.data.email);
-
-        console.log(userId);
-        console.log(emailId);
-        console.log(response.data._id);
-        console.log(response.data.email);
+        SetLoggedIn(true);
       });
     });
-    if (userId === "") {
-      return false;
-    } else {
-      console.log(userId);
-      return true;
-    }
   });
 
   return (
@@ -38,7 +29,7 @@ function App() {
           <Route exact path="/login" component={Login} />
           <Route exact path="/register" component={RegistrationForm} />
           <Route exact path="/home" component={Home} />
-          {!loggedIn ? <Login /> : <Home />}
+          {!loggedIn ? <Login id="userId" /> : <Home />}
         </Switch>
       </div>
     </Router>

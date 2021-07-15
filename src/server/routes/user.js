@@ -4,8 +4,9 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const router = express.Router();
 const auth = require("../middleware/auth");
-
 const User = require("../model/User");
+const cheerio = require("cheerio");
+const axios = require("axios");
 
 /**
  * @method - POST
@@ -150,6 +151,47 @@ router.post("/me", auth, async (req, res) => {
     res.json(user);
   } catch (e) {
     res.send({ message: "Error in Fetching user" });
+  }
+});
+async function scraper(productURL) {
+  console.log(productURL);
+  console.log("hello from scraper");
+  let Data = [];
+  const { data: html } = await axios
+    .get(productURL, {
+      headers: {
+        "User-Agent":
+          "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.90 Safari/537.36",
+      },
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  let $ = cheerio.load(html);
+  let title = $('span[id="productTitle"]').text().trim();
+  let price = $('span[id="priceblock_ourprice"]').text().trim();
+  Data.push({ title, price });
+  return Data;
+}
+
+router.post("/url", async (req, res) => {
+  try {
+    console.log(req.body);
+    const { id, urL } = await req.body;
+    const user = await User.findById(id);
+    console.log(urL);
+    const { title, price } = await scraper(urL);
+    user.naam = [
+      ...user.naam,
+      {
+        title: title,
+        price: price,
+      },
+    ];
+    res.status.json(user.naam);
+  } catch (e) {
+    console.log("error in fetching user");
+    res.send({ message: "Error in fetching user" });
   }
 });
 

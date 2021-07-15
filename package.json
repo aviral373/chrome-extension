@@ -7,6 +7,7 @@
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "bootstrap": "^5.0.2",
+    "cheerio": "^1.0.0-rc.10",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-validator": "^6.12.0",
@@ -22,6 +23,7 @@
     "react-scripts": "4.0.3",
     "redux": "^4.1.0",
     "reduxed-chrome-storage": "^2.2.0",
+    "request-promise": "^4.2.6",
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^2.0.3"
   },

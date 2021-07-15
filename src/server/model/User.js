@@ -13,6 +13,10 @@ const UserSchema = mongoose.Schema({
     type: Date,
     default: Date.now(),
   },
+  naam: {
+    type: Array,
+    default: [],
+  },
 });
 
 // export model user with UserSchema
