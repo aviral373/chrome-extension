@@ -32,7 +32,7 @@ function App() {
           <Route exact path="/login" component={Login} />
           <Route exact path="/register" component={RegistrationForm} />
           <Route exact path="/home" component={Home} />
-          {!loggedIn ? <Login /> : <Home id={token} />}
+          {!loggedIn ? <Login /> : <Home id={userId} />}
         </Switch>
       </div>
     </Router>

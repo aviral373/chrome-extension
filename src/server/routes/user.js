@@ -168,6 +168,7 @@ async function scraper(productURL) {
   let $ = cheerio.load(html);
   let title = $('span[id="productTitle"]').text().trim();
   let price = $('span[id="priceblock_ourprice"]').text().trim();
+  console.log(price);
   Data.push({ title, price });
   return Data;
 }
@@ -176,7 +177,11 @@ router.post("/url", async (req, res) => {
   try {
     const { id, urL } = await req.body;
     const user = await User.findById(id);
-    const { title, price } = await scraper(urL);
+    //console.log(title);
+    //console.log(req.body);
+    const Data = await scraper(urL);
+    const title = Data[0].title;
+    const price = Data[0].price;
     user.naam = [
       ...user.naam,
       {
@@ -184,6 +189,7 @@ router.post("/url", async (req, res) => {
         price: price,
       },
     ];
+    console.log(user.naam);
     res.json(user.naam);
   } catch (e) {
     console.log("error in fetching user");

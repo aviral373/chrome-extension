@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 const Home = ({ id }) => {
   const [url, setUrl] = useState("");
-  console.log(id);
+  const [dat, setDat] = useState({});
   const clicked = function () {
     chrome.tabs.getSelected(null, async function (tab) {
       var link = document.createElement("a");
@@ -16,14 +16,22 @@ const Home = ({ id }) => {
       axios
         .post("http://localhost:3000/user/url", payload)
         .then(function (response) {
-          console.log(response);
+          setDat(response.data);
         });
     });
   };
 
   return (
     <div>
-      <span>{url}</span>
+      {dat.map((item, key) => {
+        return (
+          <>
+            <span>
+              {item.title} : {item.price}
+            </span>
+          </>
+        );
+      })}
       <button
         onClick={() => {
           clicked();
