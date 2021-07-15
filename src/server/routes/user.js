@@ -182,6 +182,7 @@ router.post("/url", async (req, res) => {
     const Data = await scraper(urL);
     const title = Data[0].title;
     const price = Data[0].price;
+    console.log(user.naam);
     user.naam = [
       ...user.naam,
       {
@@ -189,10 +190,20 @@ router.post("/url", async (req, res) => {
         price: price,
       },
     ];
+    user.save();
     console.log(user.naam);
     res.json(user.naam);
   } catch (e) {
     console.log("error in fetching user");
+    res.send({ message: "Error in fetching user" });
+  }
+});
+router.post("/currenturl", async (req, res) => {
+  try {
+    const { id } = await req.body;
+    const user = await User.findById(id);
+    res.json(user.naam);
+  } catch (e) {
     res.send({ message: "Error in fetching user" });
   }
 });

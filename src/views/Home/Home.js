@@ -1,8 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 const Home = ({ id }) => {
   const [url, setUrl] = useState("");
-  const [dat, setDat] = useState({});
+  const [dat, setDat] = useState([]);
+  useEffect(() => {
+    const payload = {
+      id: id,
+    };
+    axios
+      .post("http://localhost:3000/user/currenturl", payload)
+      .then(function (response) {
+        setDat(response.data);
+      });
+  });
   const clicked = function () {
     chrome.tabs.getSelected(null, async function (tab) {
       var link = document.createElement("a");
@@ -12,10 +22,10 @@ const Home = ({ id }) => {
         id: id,
         urL: link.href,
       };
-      console.log(payload);
       axios
         .post("http://localhost:3000/user/url", payload)
         .then(function (response) {
+          console.log(response.data);
           setDat(response.data);
         });
     });
@@ -23,13 +33,15 @@ const Home = ({ id }) => {
 
   return (
     <div>
-      {dat.map((item, key) => {
+      {dat?.map((item, key) => {
         return (
-          <>
-            <span>
-              {item.title} : {item.price}
-            </span>
-          </>
+          <div>
+            <p>
+              <b>
+                {item.title} : {item.price}
+              </b>
+            </p>
+          </div>
         );
       })}
       <button
