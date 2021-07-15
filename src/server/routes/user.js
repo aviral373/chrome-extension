@@ -73,7 +73,6 @@ router.post(
       console.log(err.message);
       res.status(500).send("Error in Saving");
     }
-    console.log("hello");
   }
 );
 
@@ -148,14 +147,13 @@ router.post("/me", auth, async (req, res) => {
   try {
     // request.user is getting fetched from Middleware after token authentication
     const user = await User.findById(req.user.id);
+    console.log(user.id);
     res.json(user);
   } catch (e) {
     res.send({ message: "Error in Fetching user" });
   }
 });
 async function scraper(productURL) {
-  console.log(productURL);
-  console.log("hello from scraper");
   let Data = [];
   const { data: html } = await axios
     .get(productURL, {
@@ -176,10 +174,8 @@ async function scraper(productURL) {
 
 router.post("/url", async (req, res) => {
   try {
-    console.log(req.body);
     const { id, urL } = await req.body;
     const user = await User.findById(id);
-    console.log(urL);
     const { title, price } = await scraper(urL);
     user.naam = [
       ...user.naam,
@@ -188,7 +184,7 @@ router.post("/url", async (req, res) => {
         price: price,
       },
     ];
-    res.status.json(user.naam);
+    res.json(user.naam);
   } catch (e) {
     console.log("error in fetching user");
     res.send({ message: "Error in fetching user" });
